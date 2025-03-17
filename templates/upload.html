@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Census Report Generator{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Census Report Generator</h1>
+    
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h5 mb-0">Upload Attendance CSV Files</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                <div class="mb-3">
+                    <label for="fileInput" class="form-label">Select CSV Files</label>
+                    <input type="file" class="form-control" id="fileInput" name="files[]" accept=".csv" multiple required>
+                    <div class="form-text">You can select up to 30 CSV files. Maximum size per file is 16MB.</div>
+                </div>
+                
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary" id="uploadButton">
+                        <i class="bi bi-upload"></i> Upload and Process Files
+                    </button>
+                    <div class="spinner-border text-primary d-none" role="status" id="uploadSpinner">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h2 class="h5 mb-0">Instructions</h2>
+        </div>
+        <div class="card-body">
+            <ol>
+                <li>Select one or more CSV attendance files to upload</li>
+                <li>Click "Upload and Process Files" to begin processing</li>
+                <li>After processing, you'll be redirected to the reports page</li>
+                <li>Download your generated census report</li>
+            </ol>
+            
+            <p><strong>Important:</strong> Each CSV file should include the date in the filename in the format YYYY-MM-DD (e.g., attendance-report-2025-03-15.csv).</p>
+        </div>
+    </div>
+    
+    <!-- New: Links to Reports and System Status -->
+    <div class="row mt-4 mb-5">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">View Generated Reports</h5>
+                    <p class="card-text">Access previously generated census reports for download.</p>
+                    <a href="{{ url_for('list_reports') }}" class="btn btn-primary">
+                        <i class="bi bi-file-earmark-spreadsheet"></i> View Reports
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">System Status</h5>
+                    <p class="card-text">Check system status and directory permissions.</p>
+                    <a href="{{ url_for('check_permissions') }}" class="btn btn-secondary">
+                        <i class="bi bi-gear"></i> Check Status
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional: Add JavaScript to show spinner during upload -->
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', function() {
+        document.getElementById('uploadButton').disabled = true;
+        document.getElementById('uploadSpinner').classList.remove('d-none');
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Directory Permission Check{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Directory Permission Check</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h5 mb-0">Upload Directory Status</h2>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <tr>
+                    <th>Upload Directory</th>
+                    <td>{{ results.upload_directory }}</td>
+                </tr>
+                <tr>
+                    <th>Directory Exists</th>
+                    <td>
+                        {% if results.exists %}
+                            <span class="badge bg-success">Yes</span>
+                        {% else %}
+                            <span class="badge bg-danger">No</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Is Writable</th>
+                    <td>
+                        {% if results.is_writable %}
+                            <span class="badge bg-success">Yes</span>
+                        {% else %}
+                            <span class="badge bg-danger">No</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>File Stats</th>
+                    <td>{{ results.stat_info }}</td>
+                </tr>
+                <tr>
+                    <th>Current User</th>
+                    <td>{{ results.current_user }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    {% if results.generated_files %}
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h5 mb-0">Generated Files</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Filename</th>
+                            <th>Size</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for file in results.generated_files %}
+                        <tr>
+                            <td>{{ file.name }}</td>
+                            <td>{{ file.size }} bytes</td>
+                            <td>{{ file.created }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="mt-4">
+        <a href="{{ url_for('upload_file') }}" class="btn btn-outline-primary">
+            Back to Upload
+        </a>
+        <a href="{{ url_for('list_reports') }}" class="btn btn-outline-secondary">
+            View Reports
+        </a>
+    </div>
+</div>
+{% endblock %}

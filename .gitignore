@@ -1,0 +1,33 @@
+# First ignore everything
+*
+.*
+
+# Then un-ignore specific files and directories
+!app.py
+!nextus_census_processor.py
+!Procfile
+!README.md
+!requirements.txt
+
+# Un-ignore important directories
+!.ebextensions/
+!.ebextensions/**
+!.platform/
+!.platform/**
+!templates/
+!templates/**
+!uploads/
+
+# But ignore contents of uploads (just keep the directory)
+uploads/*
+!uploads/.gitkeep
+
+# Don't ignore .gitignore itself
+!.gitignore
+
+# Common Python patterns to ignore
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
