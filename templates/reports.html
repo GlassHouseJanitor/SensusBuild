@@ -1,46 +1,35 @@
+<!-- templates/reports.html -->
 {% extends 'base.html' %}
 
-{% block title %}Generated Reports{% endblock %}
+{% block title %}Available Reports{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1>Generated Reports</h1>
-    
-    {% if reports %}
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Report Name</th>
-                        <th>Created Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Available Reports</h2>
+                
+                {% if reports %}
+                <div class="list-group mt-4">
                     {% for report in reports %}
-                    <tr>
-                        <td>{{ report.filename }}</td>
-                        <td>{{ report.created.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                        <td>
-                            <a href="{{ url_for('download_report', filename=report.path) }}" class="btn btn-primary btn-sm">
-                                <i class="bi bi-download"></i> Download
-                            </a>
-                        </td>
-                    </tr>
+                    <a href="{{ url_for('download_report', filename=report.path) }}" class="list-group-item list-group-item-action bg-dark text-light border-dark">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ report.filename }}</h5>
+                            <small>{{ report.created.strftime('%Y-%m-%d %H:%M') }}</small>
+                        </div>
+                    </a>
                     {% endfor %}
-                </tbody>
-            </table>
+                </div>
+                {% else %}
+                <p class="mt-4">No reports available. <a href="{{ url_for('upload_file') }}" class="text-light">Upload files</a> to generate a report.</p>
+                {% endif %}
+            </div>
         </div>
-    {% else %}
-        <div class="alert alert-info">
-            <i class="bi bi-info-circle"></i> No reports have been generated yet. Upload CSV files to generate reports.
+        
+        <div class="mt-4">
+            <a href="{{ url_for('upload_file') }}" class="btn btn-outline-light">Upload More Files</a>
         </div>
-    {% endif %}
-    
-    <div class="mt-4">
-        <a href="{{ url_for('upload_file') }}" class="btn btn-outline-primary">
-            <i class="bi bi-arrow-left"></i> Back to Upload
-        </a>
     </div>
 </div>
 {% endblock %}
