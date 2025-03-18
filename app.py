@@ -22,13 +22,16 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Create the Flask app
-app = Flask(__name__, static_url_path='/static', static_folder='static')
+# Create the Flask app - explicitly defining static folder path
+BASE_DIR = os.environ.get('EB_SCRIPT_DIR', os.path.dirname(os.path.abspath(__file__)))
+app = Flask(__name__, 
+           static_url_path='/static',
+           static_folder=os.path.join(BASE_DIR, 'static'),
+           template_folder=os.path.join(BASE_DIR, 'templates'))
 bootstrap = Bootstrap5(app)
 
 # Configuration
 app.config['SECRET_KEY'] = os.urandom(24)
-BASE_DIR = os.environ.get('EB_SCRIPT_DIR', os.path.dirname(os.path.abspath(__file__)))
 UPLOAD_FOLDER = os.path.join('/tmp', 'uploads')  # Use /tmp which is always writable
 TEMP_FOLDER = os.path.join('/tmp', 'uploads', 'temp_input')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -52,6 +55,11 @@ try:
     logger.info(f"Set permissions on {TEMP_FOLDER}")
 except Exception as e:
     logger.warning(f"Could not set permissions on {TEMP_FOLDER}: {str(e)}")
+
+# Ensure static directory exists
+static_css_dir = os.path.join(app.static_folder, 'css')
+os.makedirs(static_css_dir, exist_ok=True)
+logger.info(f"Ensuring static CSS directory exists: {static_css_dir}")
 
 # Context processor to make year available to all templates
 @app.context_processor
@@ -277,12 +285,19 @@ def download_report(filename):
 def check_permissions():
     """Diagnostic endpoint to check directory permissions"""
     upload_dir = app.config['UPLOAD_FOLDER']
+    static_dir = app.static_folder
     results = {
         'upload_directory': upload_dir,
         'exists': os.path.exists(upload_dir),
         'is_writable': os.access(upload_dir, os.W_OK) if os.path.exists(upload_dir) else False,
         'stat_info': str(os.stat(upload_dir)) if os.path.exists(upload_dir) else 'N/A',
         'current_user': os.getenv('USER', 'unknown'),
+        'static_directory': static_dir,
+        'static_exists': os.path.exists(static_dir),
+        'static_css_exists': os.path.exists(os.path.join(static_dir, 'css')),
+        'static_css_files': [f for f in os.listdir(os.path.join(static_dir, 'css')) 
+                            if os.path.isfile(os.path.join(static_dir, 'css', f))] 
+                            if os.path.exists(os.path.join(static_dir, 'css')) else [],
         'generated_files': []
     }
     
@@ -298,6 +313,11 @@ def check_permissions():
     
     return render_template('check_permissions.html', results=results)
 
+@app.route('/static_test')
+def static_test():
+    """Test endpoint to verify static file serving"""
+    return render_template('static_test.html')
+
 @app.errorhandler(413)
 def too_large(e):
     """Handle file size exceeding the maximum limit"""
@@ -309,6 +329,17 @@ if __name__ == '__main__':
     if not Path(app.config['PROCESSOR_SCRIPT']).is_file():
         logger.error(f"Error: Could not find {app.config['PROCESSOR_SCRIPT']}. Please ensure it's in the same directory as app.py")
         sys.exit(1)
+    
+    # Check if static CSS directory exists and has the CSS file
+    css_path = os.path.join(app.static_folder, 'css', 'dark-theme.css')
+    if not os.path.exists(css_path):
+        logger.warning(f"Warning: CSS file not found at {css_path}")
+        logger.info("Please ensure your directory structure is correct:")
+        logger.info(f"- {app.static_folder}/")
+        logger.info(f"  └── css/")
+        logger.info(f"      └── dark-theme.css")
+    else:
+        logger.info(f"Found CSS file at {css_path}")
     
     # Use port 5001 instead of 5000 to avoid conflict with AirPlay
     port = int(os.environ.get('PORT', 5001))
