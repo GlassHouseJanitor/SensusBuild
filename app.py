@@ -23,7 +23,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Create the Flask app
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static', static_folder='static')
 bootstrap = Bootstrap5(app)
 
 # Configuration
