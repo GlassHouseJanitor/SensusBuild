@@ -4,19 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Fuck Kipu.{% endblock %}</title>
-    {{ bootstrap.load_css() }}
+    <title>{% block title %}Census Data Processor{% endblock %}</title>
+    
+    <!-- Debug comment to see if template is loading -->
+    <!-- Template loaded successfully -->
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-theme.css') }}">
+    
+    <!-- Inline CSS as a fallback to check if any CSS works -->
+    <style>
+        .debug-indicator {
+            padding: 5px;
+            background-color: yellow;
+            color: black;
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body>
-    <div class="app-layout">
-        <!-- The hexagon image positioned on the right side -->
-        <img src="{{ url_for('static', filename='images/hexagon.png') }}" class="hexagon-image" alt="Geometric design">
+    <!-- Debug indicator to see if CSS is applying -->
+    <div class="debug-indicator">CSS Test</div>
+    
+    <div class="app-container">
+        <!-- Hexagon image from local static directory -->
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='images/hexagon.jpg') }}" 
+                 class="hexagon-image" alt="Geometric design">
+        </div>
         
         <div class="content-area">
             <div class="container">
                 <header class="mb-5">
-                    <h1 class="display-4">Kipu Dick Eat</h1>
+                    <h1 class="display-4">{% block header %}Census Data Processor{% endblock %}</h1>
                 </header>
                 
                 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -31,7 +53,5 @@
             </div>
         </div>
     </div>
-    
-    {{ bootstrap.load_js() }}
 </body>
 </html>
