@@ -1,32 +1,28 @@
 <!-- templates/upload.html -->
 {% extends 'base.html' %}
 
-{% block title %}Upload Census Files{% endblock %}
+{% block title %}Upload CSV Files{% endblock %}
+
+{% block header %}Fuck Kipu.{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title">Upload Census Files</h2>
-                
-                <form method="POST" enctype="multipart/form-data" class="mt-4">
-                    <div class="mb-4">
-                        <label for="files" class="form-label">Select CSV files:</label>
-                        <input type="file" class="form-control" name="files[]" id="files" multiple accept=".csv">
-                        <div class="form-text text-light">Maximum 30 files, 16MB each</div>
-                    </div>
-                    
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">Process Files</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        
-        <div class="mt-4">
-            <a href="{{ url_for('list_reports') }}" class="btn btn-outline-light">View Generated Reports</a>
-        </div>
-    </div>
-</div>
+<p>Be quiet, Josh</p>
+
+<p>Upload these fucking csv files.</p>
+
+<form method="POST" enctype="multipart/form-data" id="upload-form">
+    <input type="file" name="files[]" id="file-input" multiple accept=".csv" style="display: none;">
+    <button type="button" class="btn btn-light" id="select-files-btn" 
+            onclick="document.getElementById('file-input').click();">
+        Fuck Kipu.
+    </button>
+</form>
+
+<script>
+    document.getElementById('file-input').addEventListener('change', function() {
+        if (this.files.length > 0) {
+            document.getElementById('upload-form').submit();
+        }
+    });
+</script>
 {% endblock %}
