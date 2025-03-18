@@ -1,0 +1,132 @@
+/* static/css/dark-theme.css */
+body {
+  background-color: #000000;
+  color: #ffffff;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  padding: 2rem;
+}
+
+/* Dark styling for cards */
+.card {
+  background-color: #111111;
+  border: 1px solid #333333;
+  border-radius: 0;
+}
+
+/* Dark form elements */
+.form-control {
+  background-color: #222222;
+  border: 1px solid #333333;
+  color: #ffffff;
+}
+
+.form-control:focus {
+  background-color: #222222;
+  color: #ffffff;
+  border-color: #444444;
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+}
+
+/* Button styling */
+.btn-primary, .btn-outline-primary {
+  background-color: #222222;
+  border-color: #444444;
+  color: #ffffff;
+}
+
+.btn-primary:hover, .btn-outline-primary:hover {
+  background-color: #333333;
+  border-color: #555555;
+}
+
+/* Table styling */
+.table {
+  color: #ffffff;
+}
+.app-layout {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+}
+
+.content-area {
+  flex: 1;
+  padding: 2rem;
+  z-index: 2;
+}
+
+.hexagon-image {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  width: auto;
+  z-index: 1;
+  opacity: 0.9;
+}
+
+/* For smaller screens */
+@media (max-width: 992px) {
+  .hexagon-image {
+    opacity: 0.3;
+    right: -20%;
+  }
+}
+/* Add to dark-theme.css */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+h1 {
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.card-title {
+  border-bottom: 1px solid #333;
+  padding-bottom: 1rem;
+}
+/* Add to dark-theme.css */
+/* Progress bar for file uploads */
+.progress {
+  background-color: #222;
+  height: 8px;
+  border-radius: 0;
+}
+
+.progress-bar {
+  background-color: #555;
+}
+
+/* Hover effects */
+.card {
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom file input */
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+.custom-file-input::before {
+  content: 'Select files';
+  display: inline-block;
+  background: #333;
+  border: 1px solid #555;
+  padding: 8px 20px;
+  outline: none;
+  white-space: nowrap;
+  cursor: pointer;
+  font-weight: 300;
+}
